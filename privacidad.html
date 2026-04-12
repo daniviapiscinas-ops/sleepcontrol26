@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidad — Sleep Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#2D5BE3;--purple:#7B4FD4;--dark:#1a1a2e;--gray:#5a5a7a;--light:#f7f8ff}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Quicksand',sans-serif;background:var(--light);color:var(--dark);line-height:1.7}
+
+  /* HEADER */
+  header{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);padding:48px 24px 40px;text-align:center}
+  .header-icon{font-size:3rem;display:block;margin-bottom:12px}
+  header h1{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(1.6rem,5vw,2.4rem);color:#fff;margin-bottom:8px}
+  header h2{font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;color:rgba(255,255,255,.6);margin-bottom:14px}
+  .badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 16px;font-size:.82rem;color:rgba(255,255,255,.7)}
+
+  /* LAYOUT */
+  .container{max-width:780px;margin:0 auto;padding:40px 20px 60px}
+
+  /* SECTIONS */
+  section{background:#fff;border-radius:16px;padding:28px 32px;margin-bottom:20px;box-shadow:0 2px 16px rgba(74,144,226,.08);border-left:4px solid var(--blue)}
+  section.purple{border-left-color:var(--purple)}
+  section h2{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;color:var(--blue);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  section.purple h2{color:var(--purple)}
+  section p{font-size:.93rem;color:#444;margin-bottom:10px}
+  section p:last-child{margin-bottom:0}
+  ul{margin:10px 0 0 0;padding:0;list-style:none}
+  ul li{font-size:.93rem;color:#444;padding:5px 0 5px 22px;position:relative;border-bottom:1px solid #f0f0f0}
+  ul li:last-child{border-bottom:none}
+  ul li::before{content:'•';position:absolute;left:6px;color:var(--blue);font-weight:900}
+  section.purple ul li::before{color:var(--purple)}
+  strong{color:var(--dark)}
+
+  /* SUB-SECTION */
+  .subsection{background:#f7f8ff;border-radius:10px;padding:14px 18px;margin:12px 0}
+  .subsection h3{font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;color:var(--purple);margin-bottom:8px}
+
+  /* CONTACT BOX */
+  .contact-box{background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border:1px solid rgba(74,144,226,.2);border-radius:12px;padding:18px 22px;margin-top:12px;text-align:center}
+  .contact-box p{font-size:.95rem;margin-bottom:4px}
+  .contact-box a{color:var(--blue);font-weight:700;text-decoration:none}
+  .contact-box a:hover{text-decoration:underline}
+
+  /* FOOTER */
+  footer{text-align:center;padding:28px 20px;border-top:1px solid #e0e0e0;margin-top:10px}
+  footer p{font-size:.82rem;color:var(--gray)}
+  .back-btn{display:inline-block;margin-top:16px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;text-decoration:none;border-radius:12px;padding:10px 24px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;transition:.2s}
+  .back-btn:hover{opacity:.88;transform:translateY(-1px)}
+
+  @media(max-width:500px){section{padding:20px 18px}.container{padding:24px 12px 48px}}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="header-icon">🌙</span>
+  <h1>Política de Privacidad</h1>
+  <h2>Sleep Control App · DANIVIA WORLD technologies</h2>
+  <span class="badge" id="fecha-badge">Cargando fecha…</span>
+</header>
+
+<div class="container">
+
+  <section>
+    <h2>📋 1. Responsable del tratamiento</h2>
+    <p>La presente Política de Privacidad regula el tratamiento de los datos personales de los usuarios de la aplicación <strong>Sleep Control</strong>, desarrollada y gestionada por:</p>
+    <div class="contact-box">
+      <p><strong>DANIVIA WORLD technologies</strong></p>
+      <p>Email: <a href="mailto:daniviapiscinas@gmail.com">daniviapiscinas@gmail.com</a></p>
+    </div>
+  </section>
+
+  <section class="purple">
+    <h2>📦 2. Datos que recopilamos</h2>
+    <p>Sleep Control recopila únicamente los datos necesarios para ofrecer el servicio de registro y seguimiento del sueño:</p>
+    <div class="subsection">
+      <h3>2.1 Datos de registro y cuenta</h3>
+      <ul>
+        <li>Nombre o alias del usuario</li>
+        <li>Dirección de correo electrónico</li>
+        <li>Contraseña (almacenada de forma cifrada mediante Firebase Authentication)</li>
+      </ul>
+    </div>
+    <div class="subsection">
+      <h3>2.2 Datos de uso de la aplicación</h3>
+      <ul>
+        <li>Registros de sueño: fecha, hora de inicio, hora de fin, duración y calidad</li>
+        <li>Interrupciones nocturnas: hora y duración de cada interrupción</li>
+        <li>Notas de texto opcionales introducidas por el usuario</li>
+        <li>Perfiles de seguimiento: nombre, tipo (propio, hijo/a, pareja) y avatar</li>
+      </ul>
+    </div>
+    <div class="subsection">
+      <h3>2.3 Datos técnicos</h3>
+      <ul>
+        <li>Identificador único de usuario (UID) generado por Firebase</li>
+        <li>Fecha y hora de creación de registros</li>
+      </ul>
+    </div>
+    <p style="margin-top:12px">No recopilamos datos de localización, datos biométricos ni datos de salud en sentido clínico.</p>
+  </section>
+
+  <section>
+    <h2>🎯 3. Finalidad del tratamiento</h2>
+    <p>Los datos recogidos se utilizan exclusivamente para:</p>
+    <ul>
+      <li>Permitir el registro, acceso y autenticación del usuario</li>
+      <li>Almacenar y mostrar el historial de sueño y perfiles asociados</li>
+      <li>Generar estadísticas personales sobre patrones de sueño</li>
+      <li>Ofrecer recomendaciones personalizadas de higiene del sueño</li>
+      <li>Sincronizar los datos entre dispositivos del mismo usuario</li>
+    </ul>
+  </section>
+
+  <section class="purple">
+    <h2>⚖️ 4. Base jurídica del tratamiento</h2>
+    <ul>
+      <li>El consentimiento expreso del usuario al registrarse y aceptar esta política</li>
+      <li>La ejecución del contrato de servicio (uso de la aplicación)</li>
+      <li>El interés legítimo de DANIVIA WORLD technologies en mejorar el servicio</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🔒 5. Almacenamiento y seguridad</h2>
+    <p>Los datos se almacenan en los servidores de <strong>Google Firebase</strong> (Firestore Database y Firebase Authentication):</p>
+    <ul>
+      <li>Servidores en Europa (región eur3 - europe-west)</li>
+      <li>Comunicación cifrada mediante HTTPS/TLS</li>
+      <li>Contraseñas almacenadas de forma irreversible mediante Firebase Auth</li>
+      <li>Cada usuario solo puede acceder a sus propios datos</li>
+      <li>Google Firebase cumple con el RGPD</li>
+    </ul>
+    <p style="margin-top:12px">Más información: <a href="https://firebase.google.com/support/privacy" target="_blank" style="color:var(--blue);font-weight:700">firebase.google.com/support/privacy</a></p>
+  </section>
+
+  <section class="purple">
+    <h2>⏳ 6. Tiempo de conservación</h2>
+    <p>Los datos se conservarán mientras el usuario mantenga su cuenta activa. En caso de solicitud de eliminación, todos los datos serán eliminados de forma permanente en un plazo máximo de <strong>30 días</strong>.</p>
+  </section>
+
+  <section>
+    <h2>🚫 7. Cesión de datos a terceros</h2>
+    <p>DANIVIA WORLD technologies <strong>NO vende, alquila ni comparte</strong> los datos personales de los usuarios con terceros con fines comerciales o publicitarios.</p>
+    <p>Los datos únicamente son accesibles por:</p>
+    <ul>
+      <li>Google Firebase, como proveedor de infraestructura tecnológica, bajo contrato conforme al RGPD</li>
+      <li>El propio usuario, a través de su cuenta personal en la aplicación</li>
+    </ul>
+  </section>
+
+  <section class="purple">
+    <h2>✅ 8. Derechos del usuario</h2>
+    <p>De conformidad con el RGPD (UE 2016/679) y la LOPDGDD, el usuario tiene derecho a:</p>
+    <ul>
+      <li><strong>Acceso:</strong> conocer qué datos personales tenemos sobre usted</li>
+      <li><strong>Rectificación:</strong> corregir datos inexactos o incompletos</li>
+      <li><strong>Supresión:</strong> solicitar la eliminación de sus datos</li>
+      <li><strong>Limitación:</strong> solicitar la restricción del uso de sus datos</li>
+      <li><strong>Portabilidad:</strong> recibir sus datos en formato estructurado</li>
+      <li><strong>Oposición:</strong> oponerse al tratamiento de sus datos</li>
+    </ul>
+    <div class="contact-box" style="margin-top:14px">
+      <p>Para ejercer estos derechos contacte en:</p>
+      <p><a href="mailto:daniviapiscinas@gmail.com">daniviapiscinas@gmail.com</a></p>
+      <p style="font-size:.82rem;color:#888;margin-top:6px">Responderemos en un plazo máximo de 30 días. También puede reclamar ante la <a href="https://www.aepd.es" target="_blank">AEPD</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>👨‍👩‍👧 9. Menores de edad</h2>
+    <p>Sleep Control permite registrar perfiles de seguimiento para hijos o menores a cargo:</p>
+    <ul>
+      <li>El registro del menor debe ser realizado por un adulto responsable</li>
+      <li>El adulto es el titular de la cuenta y responsable de los datos del menor</li>
+      <li>No se recopilan datos directamente de menores sin supervisión adulta</li>
+    </ul>
+    <p style="margin-top:10px">No permitimos que menores de <strong>14 años</strong> creen cuentas propias sin consentimiento verificable de sus tutores.</p>
+  </section>
+
+  <section class="purple">
+    <h2>🍪 10. Cookies y tecnologías de seguimiento</h2>
+    <ul>
+      <li>Uso de localStorage y sessionStorage para mantener la sesión localmente</li>
+      <li>No utilizamos cookies de rastreo, publicidad ni analítica de terceros</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🔄 11. Cambios en la política de privacidad</h2>
+    <p>DANIVIA WORLD technologies se reserva el derecho a modificar esta Política en cualquier momento. Los cambios serán notificados mediante aviso en la aplicación o por correo electrónico. El uso continuado implica la aceptación de la nueva política.</p>
+  </section>
+
+  <section class="purple">
+    <h2>📬 12. Contacto</h2>
+    <p>Para cualquier consulta relacionada con esta Política de Privacidad:</p>
+    <div class="contact-box">
+      <p><strong>DANIVIA WORLD technologies</strong></p>
+      <p>Email: <a href="mailto:daniviapiscinas@gmail.com">daniviapiscinas@gmail.com</a></p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>© <span id="year"></span> DANIVIA WORLD technologies — Todos los derechos reservados</p>
+  <a href="index.html" class="back-btn">← Volver a Sleep Control</a>
+</footer>
+
+<script>
+  var now = new Date();
+  document.getElementById('year').textContent = now.getFullYear();
+  var months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  document.getElementById('fecha-badge').textContent = 'Última actualización: ' + now.getDate() + ' de ' + months[now.getMonth()] + ' de ' + now.getFullYear();
+</script>
+
+</body>
+</html>
