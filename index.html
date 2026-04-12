@@ -6,11 +6,7 @@
 <title>Sleep Control</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- ═══════════════════════════════════════════════════════
-     🔥 FIREBASE CONFIG — Reemplaza con TUS datos de Firebase
-     Ve a: console.firebase.google.com → Tu proyecto → 
-     Configuración del proyecto → Tus apps → SDK
-═══════════════════════════════════════════════════════ -->
+<!-- 🔥 Firebase configurado -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile }
@@ -18,9 +14,6 @@
   import { getFirestore, collection, doc, setDoc, getDoc, addDoc, getDocs, deleteDoc, query, where, orderBy }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // ╔══════════════════════════════════════════════╗
-  // ║  ⚠️  PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE  ║
-  // ╚══════════════════════════════════════════════╝
   const firebaseConfig = {
     apiKey:            "AIzaSyCapOyNKp_YytmKsfkeS0IWPw4JRAscloM",
     authDomain:        "sleep-control-5fcc6.firebaseapp.com",
@@ -355,7 +348,11 @@ textarea{resize:vertical;min-height:68px}
           <button class="btn-add-waking" onclick="addWaking()">+ Añadir interrupción</button>
         </div>
         <div class="form-group"><label>📝 Notas (opcional)</label><textarea id="log-notes" placeholder="Ej: pesadillas, ronquidos, estrés…"></textarea></div>
-        <button class="btn-primary" onclick="saveLog()">💾 Guardar registro</button>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <button class="btn-primary" onclick="saveLog('sleep')" style="background:linear-gradient(135deg,#302b63,#4A90E2);font-size:.85rem;padding:12px 10px">🌙 Guardar hora de dormir</button>
+          <button class="btn-primary" onclick="saveLog('full')" style="font-size:.85rem;padding:12px 10px">☀️ Guardar registro completo</button>
+        </div>
+        <p style="font-size:.75rem;color:rgba(255,255,255,.35);text-align:center;margin-top:8px">Puedes guardar solo la hora de dormir y completarlo mañana al despertar</p>
       </div>
     </div>
 
@@ -676,13 +673,18 @@ async function loadLogs(){
     try{
       var q=FB.query(
         FB.collection(FB.db,'users',uid,'logs'),
-        FB.where('profileId','==',pid),
-        FB.orderBy('date','desc')
+        FB.where('profileId','==',pid)
       );
       var snap=await FB.getDocs(q);
       state.logs=[];
       snap.forEach(function(d){ state.logs.push(Object.assign({id:d.id},d.data())); });
-    }catch(e){ console.warn('Firestore query error:',e); state.logs=[]; }
+      // Ordenar por fecha descendente en el cliente (sin necesitar índice compuesto)
+      state.logs.sort(function(a,b){
+        if(b.date > a.date) return 1;
+        if(b.date < a.date) return -1;
+        return (b.createdAt||0)-(a.createdAt||0);
+      });
+    }catch(e){ console.warn('Firestore error:',e.message); state.logs=[]; }
     hideLoader();
   } else {
     var d=lsGet('sc_d_'+state.currentUser.uid)||{profiles:[],logs:[]};
@@ -726,21 +728,24 @@ function calcHours(sl,wk){
   return Math.round(m/60*10)/10;
 }
 
-async function saveLog(){
+async function saveLog(mode){
   if(!state.currentProfile){toast('⚠️ Selecciona un perfil');return}
   var date=document.getElementById('log-date').value;
   var sl=document.getElementById('log-sleep').value;
   var wk=document.getElementById('log-wake').value;
   var notes=document.getElementById('log-notes').value;
-  if(!date||!sl||!wk){toast('⚠️ Completa fecha y horas');return}
+  if(!date||!sl){toast('⚠️ Completa al menos la fecha y hora de dormir');return}
+  if(mode==='full'&&!wk){toast('⚠️ Añade la hora de despertar para guardar el registro completo');return}
 
   var entry={
     profileId: state.currentProfile.id,
-    date: date, sleep: sl, wake: wk,
-    hours: calcHours(sl,wk),
+    date: date, sleep: sl,
+    wake: wk||'',
+    hours: wk?calcHours(sl,wk):0,
     quality: state.selectedQuality||3,
     wakings: state.wakings.slice(),
     notes: notes,
+    complete: mode==='full' && !!wk,
     createdAt: Date.now()
   };
 
@@ -766,8 +771,34 @@ async function saveLog(){
   document.getElementById('log-wake').value='';
   document.getElementById('log-notes').value='';
   setQuality(0); renderWakings();
-  toast('🌙 Registro guardado');
+  var msg=mode==='sleep'?'🌙 Hora de dormir guardada — complétalo al despertar':'✅ Registro completo guardado';
+  toast(msg);
   switchTab('history',document.querySelectorAll('.tab-btn')[1]);
+}
+
+async function completeLog(id){
+  var log=state.logs.find(function(l){return l.id===id});
+  if(!log) return;
+  var wk=prompt('¿A qué hora te has despertado? (formato HH:MM)','07:00');
+  if(!wk||!/^\d{2}:\d{2}$/.test(wk)){toast('Formato incorrecto. Usa HH:MM (ej: 07:30)');return}
+  var hours=calcHours(log.sleep,wk);
+  log.wake=wk; log.hours=hours; log.complete=true;
+
+  if(useFirebase){
+    showLoader('Actualizando…');
+    try{
+      var uid=state.currentUser.uid;
+      var {doc,setDoc,getFirestore}=FB;
+      await FB.setDoc(FB.doc(FB.db,'users',uid,'logs',id),log);
+    }catch(e){toast('❌ Error: '+e.message);hideLoader();return}
+    hideLoader();
+  } else {
+    var d=lsGet('sc_d_'+state.currentUser.uid)||{profiles:[],logs:[]};
+    var idx=d.logs.findIndex(function(l){return l.id===id});
+    if(idx>-1){d.logs[idx]=log; lsSave('sc_d_'+state.currentUser.uid,d);}
+  }
+  toast('☀️ Registro completado — '+hours+'h de sueño');
+  renderHistory(); renderStats(); renderTips();
 }
 
 // ════════════════════════════════════════════════
@@ -786,18 +817,20 @@ function renderHistory(){
     var ds=dy[d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1);
     var wc=l.wakings?l.wakings.length:0;
     var q=l.quality||3;
-    return '<div class="log-item">'
-      +'<div>'
-      +'<div class="log-item-date">'+ds+'</div>'
-      +'<div class="log-item-title">🌙 '+l.sleep+' — ☀️ '+l.wake+'</div>'
+    var incomplete=!l.wake;
+    return '<div class="log-item" style="'+(incomplete?'border-color:rgba(255,190,11,.35);background:rgba(255,190,11,.05)':'')+'">'
+      +'<div style="flex:1">'
+      +'<div class="log-item-date">'+ds+(incomplete?' &nbsp;⏳ <span style="color:#ffd700;font-weight:700">Pendiente de despertar</span>':'')+'</div>'
+      +'<div class="log-item-title">🌙 '+l.sleep+(l.wake?' — ☀️ '+l.wake:' — <span style="color:rgba(255,255,255,.3);font-size:.85rem">hora despertar pendiente</span>')+'</div>'
       +'<div class="log-item-tags">'
-      +'<span class="tag tag-hours">⏱ '+l.hours+'h</span>'
-      +'<span class="tag '+qC[q]+'">'+qE[q]+' '+qL[q]+'</span>'
+      +(l.hours?'<span class="tag tag-hours">⏱ '+l.hours+'h</span>':'')
+      +(l.wake?'<span class="tag '+qC[q]+'">'+qE[q]+' '+qL[q]+'</span>':'')
       +(wc?'<span class="tag tag-wake">🔔 '+wc+' interr.</span>':'')
       +'</div>'
       +(l.notes?'<div style="margin-top:5px;font-size:.76rem;color:rgba(255,255,255,.38)">📝 '+l.notes+'</div>':'')
+      +(incomplete?'<button onclick="completeLog(\''+l.id+'\')" style="margin-top:10px;background:linear-gradient(135deg,#f39c12,#e67e22);color:white;border:none;border-radius:8px;padding:7px 14px;font-family:Quicksand,sans-serif;font-weight:700;font-size:.78rem;cursor:pointer">☀️ Registrar hora de despertar</button>':'')
       +'</div>'
-      +'<div><button class="btn-danger" onclick="deleteLog(\''+l.id+'\')">🗑</button></div>'
+      +'<div style="margin-left:8px;flex-shrink:0"><button class="btn-danger" onclick="deleteLog(\''+l.id+'\')">🗑</button></div>'
       +'</div>';
   }).join('');
 }
@@ -943,5 +976,3 @@ waitForFB(function(){
 </script>
 </body>
 </html>
-
-     
